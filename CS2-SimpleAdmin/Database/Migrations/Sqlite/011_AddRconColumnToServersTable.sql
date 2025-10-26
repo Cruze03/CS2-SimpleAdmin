@@ -1,0 +1,1 @@
+ALTER TABLE `sa_servers` ADD `rcon` VARCHAR(128) NULL;

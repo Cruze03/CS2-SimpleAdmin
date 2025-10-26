@@ -16,11 +16,12 @@ public static class ManagePlayersMenu
 
         var localizer = CS2_SimpleAdmin._localizer;
         if (!AdminManager.PlayerHasPermissions(new SteamID(admin.SteamID), "@css/generic"))
-        {
-            admin.PrintToChat(localizer?["sa_prefix"] ?? "[SimpleAdmin] " +
-                            (localizer?["sa_no_permission"] ?? "You do not have permissions to use this command"));
-            return;
-        }
+            if (!AdminManager.PlayerHasPermissions(new SteamID(admin.SteamID), "@css/generic"))
+            {
+                admin.PrintToChat(localizer?["sa_prefix"] ?? "[SimpleAdmin] " +
+                                (localizer?["sa_no_permission"] ?? "You do not have permissions to use this command"));
+                return;
+            }
 
         var menuTitle = localizer?["sa_menu_players_manage"] ?? "Manage Players";
         List<MenuItem> items = new();

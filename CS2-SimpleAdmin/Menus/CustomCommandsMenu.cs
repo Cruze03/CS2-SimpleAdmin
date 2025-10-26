@@ -11,7 +11,8 @@ public static class CustomCommandsMenu
 {
     public static void OpenMenu(CCSPlayerController admin)
     {
-        if (!admin.IsValid) return;
+        if (!admin.IsValid)
+            return;
 
         var localizer = CS2_SimpleAdmin._localizer;
         if (!AdminManager.PlayerHasPermissions(new SteamID(admin.SteamID), "@css/generic"))

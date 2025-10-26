@@ -1,0 +1,40 @@
+CREATE TABLE IF NOT EXISTS sa_servers_groups (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    servers TEXT NOT NULL,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS sa_players_ips (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    steamid INTEGER NOT NULL,
+    address TEXT NOT NULL,
+    used_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    UNIQUE (steamid, address)
+);
+
+CREATE TABLE IF NOT EXISTS sa_chatlogs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    serverId TEXT NOT NULL,
+    playerSteam64 TEXT NOT NULL,
+    playerName TEXT NOT NULL,
+    message TEXT,
+    team INTEGER NOT NULL,
+    created TIMESTAMP NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS sa_statistics (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    serverId TEXT NOT NULL,
+    playerId TEXT NOT NULL,
+    playerName TEXT NOT NULL,
+    playerIP TEXT NOT NULL,
+    connectDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    connectTime INTEGER NOT NULL,
+    disconnectDate TIMESTAMP NULL,
+    disconnectTime INTEGER NULL,
+    duration INTEGER NULL,
+    kills INTEGER NULL,
+    flags TEXT,
+    map TEXT NOT NULL
+);

@@ -25,9 +25,9 @@ public static class AdminMenu
 
         List<ChatMenuOptionData> options =
         [
-            new ChatMenuOptionData(localizer?["sa_menu_players_manage"] ?? "Players Manage", () => ManagePlayersMenu.OpenMenu(admin)),
-            new ChatMenuOptionData(localizer?["sa_menu_server_manage"] ?? "Server Manage", () => ManageServerMenu.OpenMenu(admin)),
-            new ChatMenuOptionData(localizer?["sa_menu_fun_commands"] ?? "Fun Commands", () => FunActionsMenu.OpenMenu(admin)),
+            new(localizer?["sa_menu_players_manage"] ?? "Players Manage", () => ManagePlayersMenu.OpenMenu(admin)),
+            new(localizer?["sa_menu_server_manage"] ?? "Server Manage", () => ManageServerMenu.OpenMenu(admin)),
+            new(localizer?["sa_menu_fun_commands"] ?? "Fun Commands", () => FunActionsMenu.OpenMenu(admin)),
         ];
 
         var customCommands = CS2_SimpleAdmin.Instance.Config.CustomServerCommands;
@@ -53,7 +53,7 @@ public static class AdminMenu
             }
         }
 
-        if(i == 0) return;
+        if (i == 0) return;
 
         CS2_SimpleAdmin.Menu?.ShowScrollableMenu(admin, localizer?["sa_title"] ?? "SimpleAdmin", items, (buttons, menu, selected) =>
         {
