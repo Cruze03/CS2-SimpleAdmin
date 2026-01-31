@@ -103,18 +103,6 @@ internal static class Helper
         return Regex.Replace(text, @"[^a-zA-Z0-9]", "");
     }
 
-    public static List<string> SplitByLength(string str, int length)
-    {
-        var result = new List<string>();
-
-        for (int i = 0; i < str.Length; i += length)
-        {
-            result.Add(str.Substring(i, Math.Min(length, str.Length - i)));
-        }
-
-        return result;
-    }
-
     public static bool IsValidSteamId64(string input)
     {
         const string pattern = @"^\d{17}$";
