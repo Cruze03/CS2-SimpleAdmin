@@ -56,9 +56,9 @@ public partial class CS2_SimpleAdmin
         string serverName = ConVar.Find("hostname")?.StringValue ?? "Unknown";
 
         serverName = Helper.CleanString(serverName);
-        if (serverName.Length > 32)
+        if (serverName.Length > MAX_SERVERNAME_LENGTH)
         {
-            serverName = serverName.Substring(0, 32) + "...";
+            serverName = serverName.Substring(0, MAX_SERVERNAME_LENGTH) + "...";
         }
 
         // string[] maps;
@@ -91,9 +91,9 @@ public partial class CS2_SimpleAdmin
                 var stats = player.ActionTrackingServices!.MatchStats;
 
                 string playerName = Helper.CleanString(player.PlayerName);
-                if (playerName.Length > 20)
+                if (playerName.Length > MAX_PLAYERNAME_LENGTH)
                 {
-                    playerName = player.PlayerName.Substring(0, 20) + "...";
+                    playerName = playerName.Substring(0, MAX_PLAYERNAME_LENGTH) + "...";
                 }
 
                 return new
