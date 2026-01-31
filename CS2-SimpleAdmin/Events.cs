@@ -25,6 +25,7 @@ public partial class CS2_SimpleAdmin
     {
         RegisterListener<Listeners.OnMapStart>(OnMapStart);
         // RegisterListener<Listeners.OnClientConnect>(OnClientConnect);
+        RegisterListener<Listeners.OnClientPutInServer>(OnClientPutInServer);
         RegisterListener<Listeners.OnClientConnected>(OnClientConnected);
         RegisterListener<Listeners.OnGameServerSteamAPIActivated>(OnGameServerSteamAPIActivated);
         if (Config.OtherSettings.UserMessageGagChatType)
@@ -40,6 +41,7 @@ public partial class CS2_SimpleAdmin
     {
         RemoveListener<Listeners.OnMapStart>(OnMapStart);
         RemoveListener<Listeners.OnClientConnect>(OnClientConnect);
+        RemoveListener<Listeners.OnClientPutInServer>(OnClientPutInServer);
         RemoveListener<Listeners.OnClientConnected>(OnClientConnected);
         RemoveListener<Listeners.OnGameServerSteamAPIActivated>(OnGameServerSteamAPIActivated);
         if (Config.OtherSettings.UserMessageGagChatType)
@@ -93,7 +95,6 @@ public partial class CS2_SimpleAdmin
         if (player == null || !player.IsValid || player.IsHLTV)
             return HookResult.Continue;
 
-        CachedPlayers.Remove(player);
         BotPlayers.Remove(player);
         SilentPlayers.Remove(player.Slot);
         GodPlayers.Remove(player.Slot);
@@ -104,6 +105,8 @@ public partial class CS2_SimpleAdmin
         {
             return HookResult.Continue;
         }
+
+        CachedPlayers.Remove(player);
 
 #if DEBUG
         Logger.LogCritical("[OnClientDisconnect] After Check");
@@ -130,12 +133,6 @@ public partial class CS2_SimpleAdmin
             }
 
             PlayerPenaltyManager.RemoveAllPenalties(player.Slot);
-
-            CachedPlayers.Remove(player);
-            SilentPlayers.Remove(player.Slot);
-            GodPlayers.Remove(player.Slot);
-            SpeedPlayers.Remove(player.Slot);
-            GravityPlayers.Remove(player.Slot);
 
             if (player.UserId.HasValue)
                 PlayersInfo.TryRemove(player.SteamID, out _);
@@ -176,6 +173,18 @@ public partial class CS2_SimpleAdmin
             return;
 
         PlayerManager.LoadPlayerData(player);
+    }
+
+    private void OnClientPutInServer(int playerslot)
+    {
+#if DEBUG
+        Logger.LogCritical("[OnClientPutInServer]");
+#endif
+        var player = Utilities.GetPlayerFromSlot(playerslot);
+        if (player == null || !player.IsValid || !player.IsBot)
+            return;
+
+        BotPlayers.Add(player);
     }
 
     private void OnClientConnected(int playerslot)
@@ -242,11 +251,8 @@ public partial class CS2_SimpleAdmin
         if (player == null || !player.IsValid)
             return HookResult.Continue;
 
-        if (player is { IsBot: true, IsHLTV: false })
-        {
-            BotPlayers.Add(player);
+        if (player.IsBot || player.IsHLTV)
             return HookResult.Continue;
-        }
 
         PlayerManager.LoadPlayerData(player, true);
         return HookResult.Continue;
@@ -508,7 +514,7 @@ public partial class CS2_SimpleAdmin
             ReloadAdmins(null);
 
         AddTimer(1.0f, ServerManager.CheckHibernationStatus);
-        
+
         if (!ServerLoaded || ServerId == null)
             AddTimer(1.5f, OnGameServerSteamAPIActivated);
 

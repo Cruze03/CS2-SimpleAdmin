@@ -95,7 +95,7 @@ internal static class Helper
 
     public static List<CCSPlayerController> GetValidPlayersWithBots()
     {
-        return CS2_SimpleAdmin.CachedPlayers.Concat(CS2_SimpleAdmin.BotPlayers).AsValueEnumerable().ToList();
+        return CS2_SimpleAdmin.CachedPlayers.Concat(CS2_SimpleAdmin.BotPlayers).AsValueEnumerable().Where(p => p.IsValid && p.Connected == PlayerConnectedState.PlayerConnected).ToList();
     }
 
     public static string CleanString(string text)
