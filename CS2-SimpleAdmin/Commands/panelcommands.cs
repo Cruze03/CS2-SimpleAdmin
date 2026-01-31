@@ -112,7 +112,9 @@ public partial class CS2_SimpleAdmin
             }).ToList();
 
             string jsonString = JsonSerializer.Serialize(new { server, players });
-            Server.PrintToConsole(jsonString);
+            var parts = Helper.SplitByLength(jsonString, 2048);    // 2048 seems to be game's console print limit
+            foreach (var part in parts)
+                Server.PrintToConsole(part);
         }
         catch (Exception ex)
         {
