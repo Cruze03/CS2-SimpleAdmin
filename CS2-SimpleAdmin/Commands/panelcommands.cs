@@ -55,6 +55,12 @@ public partial class CS2_SimpleAdmin
 
         string serverName = ConVar.Find("hostname")?.StringValue ?? "Unknown";
 
+        serverName = Helper.CleanString(serverName);
+        if (serverName.Length > 32)
+        {
+            serverName = serverName.Substring(0, 32) + "...";
+        }
+
         // string[] maps;
         // try
         // {
@@ -84,6 +90,12 @@ public partial class CS2_SimpleAdmin
             {
                 var stats = player.ActionTrackingServices!.MatchStats;
 
+                string playerName = Helper.CleanString(player.PlayerName);
+                if (playerName.Length > 20)
+                {
+                    playerName = player.PlayerName.Substring(0, 20) + "...";
+                }
+
                 return new
                 {
                     id = player.UserId,
@@ -92,7 +104,7 @@ public partial class CS2_SimpleAdmin
                     // accountId = player.AuthorizedSteamID?.AccountId.ToString() ?? "",
                     // steamId2 = player.AuthorizedSteamID?.SteamId2.ToString() ?? "",
                     // steamId3 = player.AuthorizedSteamID?.SteamId3.ToString() ?? "",
-                    pn = player.PlayerName,
+                    pn = playerName,
                     s64 = player.AuthorizedSteamID?.SteamId64.ToString() ?? "",
                     // ping = player.Ping,
                     t = player.Team,
@@ -112,9 +124,7 @@ public partial class CS2_SimpleAdmin
             }).ToList();
 
             string jsonString = JsonSerializer.Serialize(new { server, players });
-            var parts = Helper.SplitByLength(jsonString, 2048);    // 2048 seems to be game's console print limit
-            foreach (var part in parts)
-                Server.PrintToConsole(part);
+            Server.PrintToConsole(jsonString);
         }
         catch (Exception ex)
         {

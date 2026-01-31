@@ -98,6 +98,11 @@ internal static class Helper
         return CS2_SimpleAdmin.CachedPlayers.Concat(CS2_SimpleAdmin.BotPlayers).AsValueEnumerable().ToList();
     }
 
+    public static string CleanString(string text)
+    {
+        return Regex.Replace(text, @"[^a-zA-Z0-9]", "");
+    }
+
     public static List<string> SplitByLength(string str, int length)
     {
         var result = new List<string>();
