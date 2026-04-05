@@ -36,6 +36,7 @@ public partial class CS2_SimpleAdmin : BasePlugin, IPluginConfig<CS2_SimpleAdmin
 
         Menu = new KitsuneMenu(this);
 
+		RegisterFakeConVars(typeof(ConVars));
         RegisterEvents();
 
         if (hotReload)

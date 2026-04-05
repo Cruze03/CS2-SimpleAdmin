@@ -66,7 +66,8 @@ public class ServerManager
 
             var port = ConVar.Find("hostport")!.GetPrimitiveValue<int>();
 
-            string address = $"{(!string.IsNullOrWhiteSpace(CS2_SimpleAdmin.Instance.Config.DefaultServerIP) ? CS2_SimpleAdmin.Instance.Config.DefaultServerIP : ipAddress)}:{port}";
+			string? convarIP = ConVars.ServerIP.Value.ToString().Trim('"');
+            string address = $"{(!string.IsNullOrWhiteSpace(convarIP) ? convarIP : ipAddress)}:{port}";
 
             var hostname = ConVar.Find("hostname")!.StringValue;
             var rcon = ConVar.Find("rcon_password")!.StringValue;

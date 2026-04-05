@@ -293,7 +293,6 @@
       }
     ]
   },
-  "DefaultServerIP": "",
   "DataFolder": null,
   "ChatLog": {
     "ChatLog_Enable": true,
