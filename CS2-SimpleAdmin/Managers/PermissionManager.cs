@@ -193,6 +193,9 @@ public class PermissionManager(IDatabaseProvider? databaseProvider, CS2_SimpleAd
 
 			var admins = (await connection.QueryAsync(sql, new { CurrentTime = now, serverid = CS2_SimpleAdmin.ServerId })).ToList();
 
+			Console.WriteLine($"Loaded {admins.Count} admins from database with server_id {CS2_SimpleAdmin.ServerId}.");
+			Console.WriteLine($"Admins steamIds: {string.Join(", ", admins.Select(a => a.player_steamid))}");
+
 			var groupedPlayers = admins
 				.GroupBy(r => new { playerSteamId = r.player_steamid, playerName = r.player_name, r.immunity, r.ends })
 				.Select(g =>
@@ -484,12 +487,13 @@ public class PermissionManager(IDatabaseProvider? databaseProvider, CS2_SimpleAd
 		// }
 
 		var jsonData = validPlayers
-			.GroupBy(player => player.name) // Group by player name
+			// .GroupBy(player => player.name) // Group by player name
+			.GroupBy(player => player.identity) // Group by player identity
 			.ToDictionary(
-				group => group.Key, // Use the player name as key
+				group => group.Key, // Use the player identity as key
 				object (group) =>
 				{
-					// Consolidate data for players with same name
+					// Consolidate data for players with same identity
 					var consolidatedData = group.Aggregate(
 						new
 						{

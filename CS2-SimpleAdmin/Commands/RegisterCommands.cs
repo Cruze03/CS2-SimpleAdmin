@@ -83,7 +83,7 @@ public static class RegisterCommands
         new("css_rename", CS2_SimpleAdmin.Instance.OnRenameCommand),
         new("css_prename", CS2_SimpleAdmin.Instance.OnPrenameCommand),
         new("css_respawn", CS2_SimpleAdmin.Instance.OnRespawnCommand),
-        new("css_tp", CS2_SimpleAdmin.Instance.OnGotoCommand),
+        new("css_goto", CS2_SimpleAdmin.Instance.OnGotoCommand),
         new("css_bring", CS2_SimpleAdmin.Instance.OnBringCommand),
         new("css_pluginsmanager", CS2_SimpleAdmin.Instance.OnPluginManagerCommand),
         new("css_adminvoice", CS2_SimpleAdmin.Instance.OnAdminVoiceCommand)
@@ -177,7 +177,7 @@ public static class RegisterCommands
                 { "css_rename", new Command { Aliases = ["css_rename"] } },
                 { "css_prename", new Command { Aliases = ["css_prename"] } },
                 { "css_respawn", new Command { Aliases = ["css_respawn"] } },
-                { "css_tp", new Command { Aliases = ["css_tp", "css_tpto", "css_goto"] } },
+                { "css_goto", new Command { Aliases = ["css_tp", "css_tpto", "css_goto"] } },
                 { "css_bring", new Command { Aliases = ["css_bring", "css_tphere"] } },
                 { "css_pluginsmanager", new Command { Aliases = ["css_pluginsmanager", "css_pluginmanager"] } },
                 { "css_adminvoice", new Command { Aliases = ["css_adminvoice", "css_listenall"] } }

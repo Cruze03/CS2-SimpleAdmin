@@ -319,7 +319,7 @@ css_strip @t  # Disarm all terrorists
 Teleport yourself to another player.
 
 ```bash
-css_tp <#userid or name>
+css_goto <#userid or name>
 css_tpto <#userid or name>
 css_goto <#userid or name>
 ```
@@ -328,7 +328,7 @@ css_goto <#userid or name>
 
 **Examples:**
 ```bash
-css_tp #123
+css_goto #123
 css_goto PlayerName
 ```
 
@@ -431,7 +431,7 @@ css_speed @t 2.0  # Make all Ts fast
 | `css_prename` | `@css/ban` | Permanent rename |
 | `css_give` | `@css/cheats` | Give weapons |
 | `css_strip` | `@css/slay` | Remove weapons |
-| `css_tp` | `@css/kick` | Teleport to player |
+| `css_goto` | `@css/kick` | Teleport to player |
 | `css_bring` | `@css/kick` | Bring player |
 | `css_respawn` | `@css/cheats` | Respawn players |
 

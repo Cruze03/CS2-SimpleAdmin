@@ -1124,9 +1124,9 @@ Pacific/Kiritimati
         "css_respawn"
       ]
     },
-    "css_tp": {
+    "css_goto": {
       "Aliases": [
-        "css_tp",
+        "css_goto",
         "css_tpto",
         "css_goto"
       ]
@@ -1558,7 +1558,7 @@ css_respawn <#userid or name>
 ## Teleport to a player [<mark style="color:yellow;">@css/kick</mark>](#user-content-fn-1)[^1]
 
 ```
-css_tp <#userid or name>
+css_goto <#userid or name>
 css_tpto <#userid or name>
 css_goto <#userid or name>
 ```

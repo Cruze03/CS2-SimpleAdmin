@@ -66,8 +66,9 @@ public class ServerManager
 
             var port = ConVar.Find("hostport")!.GetPrimitiveValue<int>();
 
-			string? convarIP = ConVars.ServerIP.Value.ToString().Trim('"');
+			string? convarIP = ConVars.ServerIP.Value.ToString();
             string address = $"{(!string.IsNullOrWhiteSpace(convarIP) ? convarIP : ipAddress)}:{port}";
+			CS2_SimpleAdmin._logger?.LogInformation("Server IP: {address} (ConVar IP: {convarIP}, Helper IP: {serverIp})", address, convarIP, serverIp);
 
             var hostname = ConVar.Find("hostname")!.StringValue;
             var rcon = ConVar.Find("rcon_password")!.StringValue;
@@ -87,6 +88,7 @@ public class ServerManager
                     if (!addressExists)
                     {
                         string query = "INSERT INTO sa_servers (address, hostname) VALUES (@address, @hostname)";
+						CS2_SimpleAdmin._logger?.LogInformation("Inserting new server record for address {address}", address);
 
                         if (CS2_SimpleAdmin.Instance.Config.IsCSSPanel)
                         {
@@ -100,7 +102,8 @@ public class ServerManager
                     else
                     {
                         string query = "UPDATE `sa_servers` SET `hostname` = @hostname, `id` = `id` WHERE `address` = @address";
-
+						CS2_SimpleAdmin._logger?.LogInformation("Updating existing server record for address {address}", address);
+						
                         if (CS2_SimpleAdmin.Instance.Config.IsCSSPanel)
                         {
                             query = "UPDATE `sa_servers` SET `hostname` = @hostname, rcon = @rcon, `id` = `id` WHERE `address` = @address";
@@ -117,6 +120,7 @@ public class ServerManager
 
                     CS2_SimpleAdmin.ServerId = serverId;
                     CS2_SimpleAdmin._logger?.LogInformation("Loaded server with ip {ip}", address);
+                    CS2_SimpleAdmin._logger?.LogInformation("Loaded server with ID {id}", serverId);
 
                     CS2_SimpleAdmin.ServerLoaded = true;
 
