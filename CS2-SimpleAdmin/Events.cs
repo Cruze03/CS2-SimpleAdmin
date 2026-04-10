@@ -505,7 +505,7 @@ public partial class CS2_SimpleAdmin
     private void OnMapStart(string mapName)
     {
         if (Config.OtherSettings.ReloadAdminsEveryMapChange && ServerLoaded && ServerId != null)
-            ReloadAdmins(null);
+			AddTimer(5f, () => ReloadAdmins(null));
 
         AddTimer(1.0f, ServerManager.CheckHibernationStatus);
         

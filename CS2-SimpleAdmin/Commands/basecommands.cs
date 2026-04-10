@@ -527,9 +527,11 @@ public partial class CS2_SimpleAdmin
                     if (!string.IsNullOrEmpty(groupsFile))
                         AddTimer(3.0f, () => AdminManager.LoadAdminGroups(Instance.DataPath + "/groups.json"));
                     if (!string.IsNullOrEmpty(adminsFile))
-                        AddTimer(4.0f, () => AdminManager.LoadAdminData(Instance.DataPath + "/admins.json"));
-
-                    _logger?.LogInformation("Loaded admins!");
+                        AddTimer(4.0f, () =>
+                        {
+                            AdminManager.LoadAdminData(Instance.DataPath + "/admins.json");
+                            _logger?.LogInformation("Loaded admins!");
+                        });
                 });
             });
         });
