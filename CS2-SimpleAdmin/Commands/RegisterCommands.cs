@@ -86,7 +86,8 @@ public static class RegisterCommands
         new("css_goto", CS2_SimpleAdmin.Instance.OnGotoCommand),
         new("css_bring", CS2_SimpleAdmin.Instance.OnBringCommand),
         new("css_pluginsmanager", CS2_SimpleAdmin.Instance.OnPluginManagerCommand),
-        new("css_adminvoice", CS2_SimpleAdmin.Instance.OnAdminVoiceCommand)
+        new("css_adminvoice", CS2_SimpleAdmin.Instance.OnAdminVoiceCommand),
+        new("css_record", CS2_SimpleAdmin.Instance.OnRecordCommand)
     ];
 
     /// <summary>
@@ -180,7 +181,8 @@ public static class RegisterCommands
                 { "css_goto", new Command { Aliases = ["css_tp", "css_tpto", "css_goto"] } },
                 { "css_bring", new Command { Aliases = ["css_bring", "css_tphere"] } },
                 { "css_pluginsmanager", new Command { Aliases = ["css_pluginsmanager", "css_pluginmanager"] } },
-                { "css_adminvoice", new Command { Aliases = ["css_adminvoice", "css_listenall"] } }
+                { "css_adminvoice", new Command { Aliases = ["css_adminvoice", "css_listenall"] } },
+                { "css_record", new Command { Aliases = ["css_record", "css_demo"] } }
             }
         };
         

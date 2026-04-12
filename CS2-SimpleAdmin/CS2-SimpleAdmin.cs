@@ -78,6 +78,8 @@ public partial class CS2_SimpleAdmin : BasePlugin, IPluginConfig<CS2_SimpleAdmin
         PlayersTimer?.Kill();
         PlayersTimer = null;
         PlayerManager.CheckPlayersTimer();
+
+        Directory.CreateDirectory(Path.Combine(Server.GameDirectory, "csgo", "records"));
     }
 
     public override void OnAllPluginsLoaded(bool hotReload)

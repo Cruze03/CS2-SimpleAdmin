@@ -319,8 +319,43 @@ public class CS2_SimpleAdminConfig : BasePluginConfig
 
     [JsonPropertyName("FreezeWhileInMenu")]
     public bool FreezeWhileInMenu { get; set; } = false;
+
+    [JsonPropertyName("R2Config")]
+    public R2Config R2Config { get; set; } = new();
+
+    [JsonPropertyName("RecordSettings")]
+    public RecordSettings RecordSettings { get; set; } = new();
 }
 
+
+public class R2Config
+{
+    [JsonPropertyName("AccountId")]
+    public string AccountId { get; set; } = "";
+
+    [JsonPropertyName("BucketName")]
+    public string BucketName { get; set; } = "";
+
+    [JsonPropertyName("AccessKeyId")]
+    public string AccessKeyId { get; set; } = "";
+
+    [JsonPropertyName("SecretAccessKey")]
+    public string SecretAccessKey { get; set; } = "";
+
+    // Public base URL for building download links, e.g. https://demos.example.com
+    [JsonPropertyName("PublicBaseUrl")]
+    public string PublicBaseUrl { get; set; } = "";
+
+    // Folder prefix inside the bucket
+    [JsonPropertyName("Prefix")]
+    public string Prefix { get; set; } = "records";
+}
+
+public class RecordSettings
+{
+    [JsonPropertyName("AutoUpload")]
+    public bool AutoUpload { get; set; } = true;
+}
 
 public class DatabaseConfig
 {

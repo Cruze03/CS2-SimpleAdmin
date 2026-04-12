@@ -85,6 +85,12 @@ public partial class CS2_SimpleAdmin
             {
                 SimpleAdminApi?.OnPlayerPenaltiedEvent(playerInfo, adminInfo, PenaltyType.Gag, reason, time,
                     penaltyId);
+                if (time == 0 || time >= 60)
+                {
+                    TriggerRecord(penaltyId?.ToString(), upload: true, reason: "gag",
+                        steamId: playerInfo.SteamId.SteamId64.ToString(),
+                        penaltyId: penaltyId, penaltyType: PenaltyType.Gag);
+                }
             });
         });
 
@@ -395,6 +401,12 @@ public partial class CS2_SimpleAdmin
             {
                 SimpleAdminApi?.OnPlayerPenaltiedEvent(playerInfo, adminInfo, PenaltyType.Mute, reason, time,
                     penaltyId);
+                if (time == 0 || time >= 60)
+                {
+                    TriggerRecord(penaltyId?.ToString(), upload: true, reason: "mute",
+                        steamId: playerInfo.SteamId.SteamId64.ToString(),
+                        penaltyId: penaltyId, penaltyType: PenaltyType.Mute);
+                }
             });
         });
 
@@ -707,11 +719,17 @@ public partial class CS2_SimpleAdmin
         // Asynchronously handle silence logic
         Task.Run(async () =>
         {
-            int? penaltyId = await MuteManager.MutePlayer(playerInfo, adminInfo, reason, time, 2); 
+            int? penaltyId = await MuteManager.MutePlayer(playerInfo, adminInfo, reason, time, 2);
             await Server.NextWorldUpdateAsync(() =>
             {
                 SimpleAdminApi?.OnPlayerPenaltiedEvent(playerInfo, adminInfo, PenaltyType.Silence, reason, time,
                     penaltyId);
+                if (time == 0 || time >= 60)
+                {
+                    TriggerRecord(penaltyId?.ToString(), upload: true, reason: "silence",
+                        steamId: playerInfo.SteamId.SteamId64.ToString(),
+                        penaltyId: penaltyId, penaltyType: PenaltyType.Silence);
+                }
             });
         });
 

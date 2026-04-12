@@ -408,4 +408,11 @@ public class SqliteDatabaseProvider(string filePath) : IDatabaseProvider
         multiServer
             ? "UPDATE sa_warns SET status = 'EXPIRED' WHERE status = 'ACTIVE' AND duration > 0 AND ends <= @CurrentTime"
             : "UPDATE sa_warns SET status = 'EXPIRED' WHERE status = 'ACTIVE' AND duration > 0 AND ends <= @CurrentTime AND server_id = @serverid";
+
+    public string GetInsertRecordQuery() =>
+        """
+        INSERT INTO `sa_records` (`name`, `url`, `reason`, `steam_id`, `penalty_id`, `penalty_type`, `created`, `server_id`)
+        VALUES (@name, @url, @reason, @steamId, @penaltyId, @penaltyType, @created, @serverId);
+        SELECT last_insert_rowid();
+        """;
 }

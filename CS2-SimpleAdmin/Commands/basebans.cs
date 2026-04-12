@@ -89,6 +89,12 @@ public partial class CS2_SimpleAdmin
             await Server.NextWorldUpdateAsync(() =>
             {
                 SimpleAdminApi?.OnPlayerPenaltiedEvent(playerInfo, adminInfo, PenaltyType.Ban, reason, time, penaltyId);
+                if (time == 0 || time >= 60)
+                {
+                    TriggerRecord(penaltyId?.ToString(), upload: true, reason: "ban",
+                        steamId: playerInfo.SteamId.SteamId64.ToString(),
+                        penaltyId: penaltyId, penaltyType: PenaltyType.Ban);
+                }
             });
         });
 

@@ -63,4 +63,7 @@ public interface IDatabaseProvider
     string GetUnwarnByIdQuery(bool multiServer);
     string GetUnwarnLastQuery(bool multiServer);
     string GetExpireWarnsQuery(bool multiServer);
+
+    // RecordManager
+    string GetInsertRecordQuery();
 }

@@ -28,6 +28,7 @@
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
     <PackageReference Include="System.Linq.Async" Version="7.0.0" />
     <PackageReference Include="ZLinq" Version="1.5.4" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.*" />
   </ItemGroup>
 
   <ItemGroup>
@@ -129,6 +130,12 @@
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
 	<None Update="Database\Migrations\Sqlite\016_OptimizeTablesAndIndexes.sql">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Update="Database\Migrations\Mysql\117_CreateRecordsTable.sql">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Update="Database\Migrations\Sqlite\117_CreateRecordsTable.sql">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
 </ItemGroup>
