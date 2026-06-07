@@ -55,6 +55,12 @@ public partial class CS2_SimpleAdmin
 
         string serverName = ConVar.Find("hostname")?.StringValue ?? "Unknown";
 
+        serverName = Helper.CleanString(serverName);
+        if (serverName.Length > MAX_SERVERNAME_LENGTH)
+        {
+            serverName = serverName.Substring(0, MAX_SERVERNAME_LENGTH) + "...";
+        }
+
         // string[] maps;
         // try
         // {
@@ -84,6 +90,12 @@ public partial class CS2_SimpleAdmin
             {
                 var stats = player.ActionTrackingServices!.MatchStats;
 
+                string playerName = Helper.CleanString(player.PlayerName);
+                if (playerName.Length > MAX_PLAYERNAME_LENGTH)
+                {
+                    playerName = playerName.Substring(0, MAX_PLAYERNAME_LENGTH) + "...";
+                }
+
                 return new
                 {
                     id = player.UserId,
@@ -92,7 +104,7 @@ public partial class CS2_SimpleAdmin
                     // accountId = player.AuthorizedSteamID?.AccountId.ToString() ?? "",
                     // steamId2 = player.AuthorizedSteamID?.SteamId2.ToString() ?? "",
                     // steamId3 = player.AuthorizedSteamID?.SteamId3.ToString() ?? "",
-                    pn = player.PlayerName,
+                    pn = playerName,
                     s64 = player.AuthorizedSteamID?.SteamId64.ToString() ?? "",
                     // ping = player.Ping,
                     t = player.Team,

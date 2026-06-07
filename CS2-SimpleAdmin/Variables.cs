@@ -83,4 +83,8 @@ public partial class CS2_SimpleAdmin
     // Funny list
     private readonly List<string> _requiredPlugins = [];
     private readonly List<string> _requiredShared = ["KitsuneMenu", "CS2-SimpleAdminApi"];
+
+    // panel const
+    private const int MAX_SERVERNAME_LENGTH = 32;
+    private const int MAX_PLAYERNAME_LENGTH = 20;
 }

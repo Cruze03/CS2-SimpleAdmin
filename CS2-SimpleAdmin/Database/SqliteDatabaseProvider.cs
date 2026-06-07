@@ -167,6 +167,9 @@ public class SqliteDatabaseProvider(string filePath) : IDatabaseProvider
             ? "UPDATE sa_bans SET player_ip = NULL WHERE status = 'ACTIVE' AND ends <= @ipBansTime"
             : "UPDATE sa_bans SET player_ip = NULL WHERE status = 'ACTIVE' AND ends <= @ipBansTime AND server_id = @serverid";
 
+    public string GetExpireOldPlayerIpsQuery() =>
+        "DELETE FROM sa_players_ips WHERE used_at <= @ipBansTime";
+
     public string GetAdminsQuery() =>
         """
         SELECT sa_admins.player_steamid, sa_admins.player_name, sa_admins_flags.flag, sa_admins.immunity, sa_admins.ends
