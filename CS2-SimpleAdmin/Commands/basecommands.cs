@@ -559,9 +559,12 @@ public partial class CS2_SimpleAdmin
 
             Server.ExecuteCommand("sv_disable_teamselect_menu 1");
 
-            caller.ChangeTeam(CsTeam.None);
-            AddTimer(0.2f, () => { Server.ExecuteCommand("sv_disable_teamselect_menu 0"); });
-            SimpleAdminApi?.OnAdminToggleSilentEvent(caller.Slot, true);
+            Server.NextWorldUpdate(() =>
+            {
+                caller.ChangeTeam(CsTeam.None);
+                AddTimer(0.2f, () => { Server.ExecuteCommand("sv_disable_teamselect_menu 0"); });
+                SimpleAdminApi?.OnAdminToggleSilentEvent(caller.Slot, true);
+            });
         }
     }
 

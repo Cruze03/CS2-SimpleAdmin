@@ -97,7 +97,7 @@ internal static class Helper
 
     public static List<CCSPlayerController> GetValidPlayersWithBots()
     {
-        return CS2_SimpleAdmin.CachedPlayers.Concat(CS2_SimpleAdmin.BotPlayers).AsValueEnumerable().Where(p => p.IsValid && p.Connected == PlayerConnectedState.PlayerConnected).ToList();
+        return CS2_SimpleAdmin.CachedPlayers.Concat(CS2_SimpleAdmin.BotPlayers).AsValueEnumerable().Where(p => p.IsValid && p.Connected == PlayerConnectedState.Connected).ToList();
     }
 
     public static string CleanString(string text)
@@ -907,7 +907,7 @@ internal static class Helper
                 WriteIndented = true,
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             });
-            
+
             File.WriteAllText(CfgPath, updatedJsonContent);
         }
     }

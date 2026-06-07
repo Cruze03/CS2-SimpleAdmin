@@ -102,7 +102,7 @@ public partial class CS2_SimpleAdmin
 
         playersToTarget.ForEach(player =>
         {
-            if (player.Connected != PlayerConnectedState.PlayerConnected)
+            if (player.Connected != PlayerConnectedState.Connected)
                 return;
 
             GiveWeapon(caller, player, weaponName, callerName, command);
@@ -235,7 +235,7 @@ public partial class CS2_SimpleAdmin
         callerName ??= caller != null ? caller.PlayerName : _localizer?["sa_console"] ?? "Console";
 
         // Check if player is valid, alive, and connected
-        if (!player.IsValid || player.PlayerPawn?.Value?.LifeState != (int)LifeState_t.LIFE_ALIVE || player.Connected != PlayerConnectedState.PlayerConnected)
+        if (!player.IsValid || player.PlayerPawn?.Value?.LifeState != (int)LifeState_t.LIFE_ALIVE || player.Connected != PlayerConnectedState.Connected)
             return;
 
         // Strip weapons from the player
@@ -336,7 +336,7 @@ public partial class CS2_SimpleAdmin
 
         playersToTarget.ForEach(player =>
         {
-            if (player.Connected != PlayerConnectedState.PlayerConnected)
+            if (player.Connected != PlayerConnectedState.Connected)
                 return;
 
             if (caller!.CanTarget(player))
@@ -404,7 +404,7 @@ public partial class CS2_SimpleAdmin
 
         playersToTarget.ForEach(player =>
         {
-            if (player.Connected != PlayerConnectedState.PlayerConnected)
+            if (player.Connected != PlayerConnectedState.Connected)
                 return;
 
             if (caller!.CanTarget(player))
@@ -473,7 +473,7 @@ public partial class CS2_SimpleAdmin
 
         playersToTarget.ForEach(player =>
         {
-            if (player.Connected != PlayerConnectedState.PlayerConnected)
+            if (player.Connected != PlayerConnectedState.Connected)
                 return;
 
             if (caller!.CanTarget(player))
@@ -821,7 +821,7 @@ public partial class CS2_SimpleAdmin
 
         playersToTarget.ForEach(player =>
         {
-            if (player.Connected != PlayerConnectedState.PlayerConnected)
+            if (player.Connected != PlayerConnectedState.Connected)
                 return;
 
             if (caller!.CanTarget(player))
@@ -1087,7 +1087,7 @@ public partial class CS2_SimpleAdmin
     //     Helper.LogCommand(caller, command);
     //
     //     // Process each player to teleport
-    //     foreach (var player in playersToTarget.Where(player => player is { Connected: PlayerConnectedState.PlayerConnected, PlayerPawn.Value.LifeState: (int)LifeState_t.LIFE_ALIVE }).Where(caller.CanTarget))
+    //     foreach (var player in playersToTarget.Where(player => player is { Connected: PlayerConnectedState.Connected, PlayerPawn.Value.LifeState: (int)LifeState_t.LIFE_ALIVE }).Where(caller.CanTarget))
     //     {
     //         if (caller.PlayerPawn.Value == null || player.PlayerPawn.Value == null)
     //             continue;

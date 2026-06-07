@@ -285,7 +285,7 @@ internal class PlayerManager
 
                     if (player is null) continue;
 
-                    if (player is { IsValid: true, Connected: PlayerConnectedState.PlayerConnected, PlayerPawn.Value.LifeState: (int)LifeState_t.LIFE_ALIVE })
+                    if (player is { IsValid: true, Connected: PlayerConnectedState.Connected, PlayerPawn.Value.LifeState: (int)LifeState_t.LIFE_ALIVE })
                     {
                         player.SetSpeed(speed);
                     }
@@ -300,7 +300,7 @@ internal class PlayerManager
 
                     if (player is null) continue;
 
-                    if (player is { IsValid: true, Connected: PlayerConnectedState.PlayerConnected, PlayerPawn.Value.LifeState: (int)LifeState_t.LIFE_ALIVE })
+                    if (player is { IsValid: true, Connected: PlayerConnectedState.Connected, PlayerPawn.Value.LifeState: (int)LifeState_t.LIFE_ALIVE })
                     {
                         player.SetGravity(gravity);
                     }

@@ -23,7 +23,7 @@ public partial class CS2_SimpleAdmin
         if (targets == null) return;
         var playersToTarget = targets.Players.Where(player =>
             player.IsValid &&
-            player is { IsHLTV: false, Connected: PlayerConnectedState.PlayerConnected, PlayerPawn.Value.LifeState: (int)LifeState_t.LIFE_ALIVE }).ToList();
+            player is { IsHLTV: false, Connected: PlayerConnectedState.Connected, PlayerPawn.Value.LifeState: (int)LifeState_t.LIFE_ALIVE }).ToList();
 
         playersToTarget.ForEach(player =>
         {
@@ -88,7 +88,7 @@ public partial class CS2_SimpleAdmin
 
         playersToTarget.ForEach(player =>
         {
-            if (player.Connected != PlayerConnectedState.PlayerConnected)
+            if (player.Connected != PlayerConnectedState.Connected)
                 return;
 
             if (caller!.CanTarget(player))

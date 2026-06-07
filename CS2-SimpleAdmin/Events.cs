@@ -65,7 +65,7 @@ public partial class CS2_SimpleAdmin
     //         ? Utilities.GetPlayerFromUserid(userId) 
     //         : null;
     //     
-    //     if (target == null || !target.IsValid || target.Connected != PlayerConnectedState.PlayerConnected)
+    //     if (target == null || !target.IsValid || target.Connected != PlayerConnectedState.Connected)
     //         return HookResult.Continue;
     //
     //     return !AdminManager.CanPlayerTarget(caller, target) ? HookResult.Stop : HookResult.Continue;
