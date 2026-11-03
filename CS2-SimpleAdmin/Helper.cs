@@ -462,6 +462,25 @@ internal static class Helper
         _ = CS2_SimpleAdmin.DiscordWebhookClientLog.SendMessageAsync(GenerateMessageDiscord(localizer["sa_discord_log_command", $"[{callerName}]({communityUrl})", command]));
     }
 
+    /// <summary>
+    /// Resolves the admin name one recipient should see, honoring ShowActivityType:
+    /// on type 0 and 1 only admins see the real name, everyone else sees the generic ADMIN label.
+    /// The generic and console labels are uppercased so they read as labels beside real player names.
+    /// </summary>
+    /// <param name="recipient">The player the message is being sent to.</param>
+    /// <param name="callerName">Name of the admin who ran the command, or null for console.</param>
+    internal static string ResolveActivityName(CCSPlayerController recipient, string? callerName)
+    {
+        var hideFromPlayers = CS2_SimpleAdmin.Instance.Config.OtherSettings.ShowActivityType is 0 or 1;
+
+        if (hideFromPlayers
+            && !AdminManager.PlayerHasPermissions(new SteamID(recipient.SteamID), "@css/kick")
+            && !AdminManager.PlayerHasPermissions(new SteamID(recipient.SteamID), "@css/ban"))
+            return (CS2_SimpleAdmin._localizer?["sa_admin"] ?? "Admin").ToString().ToUpperInvariant();
+
+        return callerName ?? (CS2_SimpleAdmin._localizer?["sa_console"] ?? "Console").ToString().ToUpperInvariant();
+    }
+
     public static void ShowAdminActivity(string messageKey, string? callerName = null, bool dontPublish = false, params object[] messageArgs)
     {
         string[] publishActions = ["ban", "gag", "silence", "mute"];
@@ -511,15 +530,9 @@ internal static class Helper
             var currentMessageArgs = (string[])formattedMessageArgs.Clone();
 
             // Replace "CALLER" placeholder based on showActivityType and whether the recipient is an admin
+            var shownName = ResolveActivityName(controller, callerName);
             for (var i = 0; i < currentMessageArgs.Length; i++)
-            {
-                var arg = currentMessageArgs[i];
-                currentMessageArgs[i] = CS2_SimpleAdmin.Instance.Config.OtherSettings.ShowActivityType switch
-                {
-                    1 => arg.Replace("CALLER", AdminManager.PlayerHasPermissions(new SteamID(controller.SteamID), "@css/kick") || AdminManager.PlayerHasPermissions(new SteamID(controller.SteamID), "@css/ban") ? callerName : CS2_SimpleAdmin._localizer["sa_admin"]),
-                    _ => arg.Replace("CALLER", callerName ?? CS2_SimpleAdmin._localizer["sa_console"]),
-                };
-            }
+                currentMessageArgs[i] = currentMessageArgs[i].Replace("CALLER", shownName);
 
             // Send the localized message to each player
             controller.SendLocalizedMessage(CS2_SimpleAdmin._localizer, messageKey, currentMessageArgs.Cast<object>().ToArray());
@@ -594,15 +607,9 @@ internal static class Helper
             var currentMessageArgs = (string[])formattedMessageArgs.Clone();
 
             // Replace "CALLER" placeholder based on showActivityType
+            var shownName = ResolveActivityName(controller, callerName);
             for (var i = 0; i < currentMessageArgs.Length; i++)
-            {
-                var arg = currentMessageArgs[i];
-                currentMessageArgs[i] = CS2_SimpleAdmin.Instance.Config.OtherSettings.ShowActivityType switch
-                {
-                    1 => arg.Replace("CALLER", AdminManager.PlayerHasPermissions(new SteamID(controller.SteamID), "@css/kick") || AdminManager.PlayerHasPermissions(new SteamID(controller.SteamID), "@css/ban") ? callerName : CS2_SimpleAdmin._localizer["sa_admin"]),
-                    _ => arg.Replace("CALLER", callerName ?? CS2_SimpleAdmin._localizer["sa_console"]),
-                };
-            }
+                currentMessageArgs[i] = currentMessageArgs[i].Replace("CALLER", shownName);
 
             // Send the localized message to each player using their language
             controller.SendLocalizedMessage(moduleLocalizer, messageKey, currentMessageArgs.Cast<object>().ToArray());
@@ -907,7 +914,7 @@ internal static class Helper
                 WriteIndented = true,
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             });
-
+            
             File.WriteAllText(CfgPath, updatedJsonContent);
         }
     }

@@ -15,11 +15,7 @@ using Menu;
 
 namespace CS2_SimpleAdmin;
 
-// TODO:
-// Speed fix
-// Gravity fix
-
-[MinimumApiVersion(340)]
+[MinimumApiVersion(369)]
 public partial class CS2_SimpleAdmin : BasePlugin, IPluginConfig<CS2_SimpleAdminConfig>
 {
     internal static CS2_SimpleAdmin Instance { get; private set; } = new();
@@ -27,7 +23,7 @@ public partial class CS2_SimpleAdmin : BasePlugin, IPluginConfig<CS2_SimpleAdmin
     public override string ModuleName => "CS2-SimpleAdmin" + (Helper.IsDebugBuild ? " (DEBUG)" : " (RELEASE)");
     public override string ModuleDescription => "Simple admin plugin for Counter-Strike 2 :)";
     public override string ModuleAuthor => "daffyy, Dliix66, ShiNxz & Cruze";
-    public override string ModuleVersion => "1.7.8-beta-10b";
+    public override string ModuleVersion => "1.9.1";
 
     public override void Load(bool hotReload)
     {
@@ -55,8 +51,8 @@ public partial class CS2_SimpleAdmin : BasePlugin, IPluginConfig<CS2_SimpleAdmin
                 PlayersInfo.Clear();
                 CachedPlayers.Clear();
                 BotPlayers.Clear();
-
-                foreach (var player in Utilities.GetPlayers().Where(p => p.IsValid && p is { Connected: PlayerConnectedState.Connected, IsHLTV: false }).ToArray())
+                
+                foreach (var player in Utilities.GetPlayers().Where(p => p.IsValid && p is { Connected: PlayerConnectedState.Connected, IsHLTV: false }).ToArray()) 
                 {
                     if (!player.IsBot)
                         PlayerManager.LoadPlayerData(player, true);
@@ -65,9 +61,7 @@ public partial class CS2_SimpleAdmin : BasePlugin, IPluginConfig<CS2_SimpleAdmin
                 }
                 ;
             });
-
-            PlayersTimer?.Kill();
-            PlayersTimer = null;
+            
         }
 
         SimpleAdminApi = new Api.CS2_SimpleAdminApi();
@@ -82,6 +76,13 @@ public partial class CS2_SimpleAdmin : BasePlugin, IPluginConfig<CS2_SimpleAdmin
     {
         AddTimer(6.0f, () => ReloadAdmins(null));
         RegisterEvents();
+        AddTimer(0.5f, RegisterCommands.InitializeCommands);
+        // Admins are reloaded by ServerManager once ServerId is known (or on its failure paths).
+        // Loading the plugin mid-map (css_plugins load) fires no map start, so kick server loading off ourselves.
+        AddTimer(5.0f, () =>
+        {
+            if (!ServerLoaded) OnGameServerSteamAPIActivated();
+        });
 
         new PlayerManager().CheckPlayersTimer();
 
@@ -97,20 +98,11 @@ public partial class CS2_SimpleAdmin : BasePlugin, IPluginConfig<CS2_SimpleAdmin
                 $"to rejoin the server for 60 seconds. " +
                 $"To enable instant banning, set 'UnlockConCommands': true"
             );
-            _logger?.LogError(
-                $"⚠️ Warning: 'UnlockConCommands' is disabled in core.json. " +
-                $"Players will not be automatically banned when kicked and will be able " +
-                $"to rejoin the server for 60 seconds. " +
-                $"To enable instant banning, set 'UnlockConCommands': true"
-            );
         }
     }
 
     public void OnConfigParsed(CS2_SimpleAdminConfig config)
     {
-        if (System.Diagnostics.Debugger.IsAttached)
-            Environment.FailFast(":(!");
-
         Helper.UpdateConfig(config);
 
         _logger = Logger;
@@ -168,7 +160,10 @@ public partial class CS2_SimpleAdmin : BasePlugin, IPluginConfig<CS2_SimpleAdmin
         }
 
         if (missing)
-            Server.ExecuteCommand($"css_plugins unload {ModuleName}");
+        {
+            Server.ExecuteCommand($"css_plugins unload {ModuleDirectory}");
+            return;
+        }
 
         Instance = this;
 

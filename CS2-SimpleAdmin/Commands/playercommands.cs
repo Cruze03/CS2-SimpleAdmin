@@ -792,15 +792,18 @@ public partial class CS2_SimpleAdmin
             }
 
             // Determine if the new name is valid and update the renamed players list
+            var steamId = player.SteamID;
             if (!string.IsNullOrEmpty(newName))
             {
-                RenamedPlayers[player.SteamID] = newName;
+                RenamedPlayers[steamId] = newName;
                 player.Rename(newName);
             }
             else
             {
                 RenamedPlayers.Remove(player.SteamID);
             }
+
+            Task.Run(() => PlayerManager.SaveRenamedPlayer(steamId, newName));
         });
     }
 

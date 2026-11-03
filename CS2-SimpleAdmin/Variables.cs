@@ -75,7 +75,7 @@ public partial class CS2_SimpleAdmin
 
     static string firstMessage = "";
     static string secondMessage = "";
-    private static readonly PlayerManager PlayerManager = new();
+    internal static readonly PlayerManager PlayerManager = new();
 
     // Timers
     internal Timer? PlayersTimer = null;

@@ -34,7 +34,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 10.0.x
 
       - name: Get Version
         id: get_version
@@ -64,28 +64,12 @@ jobs:
       - name: Zip Main Build Output
         run: zip -r CS2-SimpleAdmin-${{ steps.get_version.outputs.VERSION }}.zip ${{ env.OUTPUT_PATH }}
 
-      - name: Extract & Zip StatusBlocker Linux
-        run: |
-          mkdir -p statusblocker-linux &&
-          tar -xzf Modules/CS2-SimpleAdmin_StealthModule/METAMOD\ PLUGIN/StatusBlocker-v*-linux.tar.gz -C statusblocker-linux &&
-          cd statusblocker-linux &&
-          zip -r ../StatusBlocker-linux-${{ steps.get_version.outputs.VERSION }}.zip ./*
-
-      - name: Extract & Zip StatusBlocker Windows
-        run: |
-          mkdir -p statusblocker-windows &&
-          tar -xzf Modules/CS2-SimpleAdmin_StealthModule/METAMOD\ PLUGIN/StatusBlocker-v*-windows.tar.gz -C statusblocker-windows &&
-          cd statusblocker-windows &&
-          zip -r ../StatusBlocker-windows-${{ steps.get_version.outputs.VERSION }}.zip ./*
-
       - name: Upload all artifacts
         uses: actions/upload-artifact@v4
         with:
           name: CS2-SimpleAdmin-Build-Artifacts
           path: |
             CS2-SimpleAdmin-${{ steps.get_version.outputs.VERSION }}.zip
-            StatusBlocker-linux-${{ steps.get_version.outputs.VERSION }}.zip
-            StatusBlocker-windows-${{ steps.get_version.outputs.VERSION }}.zip
 
   publish:
     needs: build
@@ -106,8 +90,6 @@ jobs:
         with:
           artifacts: |
             CS2-SimpleAdmin-${{ needs.build.outputs.build_version }}.zip
-            StatusBlocker-linux-${{ needs.build.outputs.build_version }}.zip
-            StatusBlocker-windows-${{ needs.build.outputs.build_version }}.zip
           name: "CS2-SimpleAdmin-${{ needs.build.outputs.build_version }}"
           tag: "fork-build-${{ needs.build.outputs.build_version }}-${{ github.run_id }}"
           body: |
@@ -118,8 +100,5 @@ jobs:
               After the first launch, configure the plugin using the JSON config file at:
               addons/counterstrikesharp/configs/plugins/CS2-SimpleAdmin/CS2-SimpleAdmin.json
 
-            - StatusBlocker:
-              Place the plugin files directly into the addons directory.
-              This plugin is a Metamod module for the StealthModule and does not require a subfolder.
 
             Remember to restart or reload your game server after installing and configuring the plugins.

@@ -1,4 +1,4 @@
-﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Entities;
 using Dapper;
 using Microsoft.Extensions.Logging;
@@ -225,13 +225,13 @@ public class PermissionManager(IDatabaseProvider? databaseProvider, CS2_SimpleAd
 				})
 				.ToList();
 
-			return groupedPlayers;
-		}
-		catch (Exception ex)
-		{
-			CS2_SimpleAdmin._logger?.LogError("Unable to load admins from database! {exception}", ex.Message);
-			return [];
-		}
+		    return groupedPlayers;
+	    }
+	    catch (Exception ex)
+	    {
+		    CS2_SimpleAdmin._logger?.LogError("Unable to load admins from database! {exception}", ex.Message);
+		    throw; // an empty list would strip every admin; abort the reload and keep the current permissions
+	    }
 	}
 
 
@@ -464,24 +464,12 @@ public class PermissionManager(IDatabaseProvider? databaseProvider, CS2_SimpleAd
 	/// Creates a JSON file containing admins data asynchronously.
 	/// </summary>
 	[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
-	public async Task CreateAdminsJsonFile()
+	public async Task<List<(SteamID steamId, DateTime? ends, List<string> flags)>> CreateAdminsJsonFile()
 	{
 		List<(ulong identity, string name, List<string> flags, int immunity, DateTime? ends)> allPlayers = await GetAllPlayersFlags();
-		var validPlayers = allPlayers
-			.Where(player => SteamID.TryParse(player.identity.ToString(), out _))
-			.ToList();
-
-		// foreach (var player in allPlayers)
-		// {
-		// 	var (steamId, name, flags, immunity, ends) = player;
-		//
-		// 	Console.WriteLine($"Player SteamID: {steamId}");
-		// 	Console.WriteLine($"Player Name: {name}");
-		// 	Console.WriteLine($"Flags: {string.Join(", ", flags)}");
-		// 	Console.WriteLine($"Immunity: {immunity}");
-		// 	Console.WriteLine($"Ends: {(ends.HasValue ? ends.Value.ToString("yyyy-MM-dd HH:mm:ss") : "Never")}");
-		// 	Console.WriteLine();
-		// }
+        var validPlayers = allPlayers
+            .Where(player => SteamID.TryParse(player.identity.ToString(), out _))
+            .ToList();
 
 		var jsonData = validPlayers
 			.GroupBy(player => player.name) // Group by player name
@@ -517,84 +505,17 @@ public class PermissionManager(IDatabaseProvider? databaseProvider, CS2_SimpleAd
 							// Combine flags and groups
 							acc = acc with
 							{
-								flags = acc.flags.Concat(splitFlags.Where(flag => flag.StartsWith("@"))).Distinct().ToList(),
-								groups = acc.groups.Concat(splitFlags.Where(flag => flag.StartsWith("#"))).Distinct().ToList()
+								flags = acc.flags.Concat(splitFlags.Where(flag => flag.StartsWith($"@"))).Distinct().ToList(),
+								groups = acc.groups.Concat(splitFlags.Where(flag => flag.StartsWith($"#"))).Distinct().ToList()
 							};
 
 							return acc;
 						});
 
-					Server.NextWorldUpdate(() =>
-					{
-						var keysToRemove = new List<SteamID>();
-
-						foreach (var steamId in AdminCache.Keys.ToList())
-						{
-							var data = AdminManager.GetPlayerAdminData(steamId);
-							if (data != null)
-							{
-								var flagsArray = AdminCache[steamId].Flags.ToArray();
-								AdminManager.RemovePlayerPermissions(steamId, flagsArray);
-								AdminManager.RemovePlayerFromGroup(steamId, true, flagsArray);
-							}
-
-							keysToRemove.Add(steamId);
-						}
-
-						foreach (var steamId in keysToRemove)
-						{
-							if (!AdminCache.TryRemove(steamId, out _)) continue;
-
-							var data = AdminManager.GetPlayerAdminData(steamId);
-							if (data == null) continue;
-							if (data.Flags.Count != 0 && data.Groups.Count != 0) continue;
-
-							AdminManager.ClearPlayerPermissions(steamId);
-							AdminManager.RemovePlayerAdminData(steamId);
-						}
-
-						foreach (var player in group)
-						{
-							if (SteamID.TryParse(player.identity.ToString(), out var steamId) && steamId != null)
-							{
-								AdminCache.TryAdd(steamId, (player.ends, player.flags));
-							}
-						}
-					});
-
-					// Server.NextFrameAsync(() =>
-					// {
-					// 	for (var index = 0; index < AdminCache.Keys.ToList().Count; index++)
-					// 	{
-					// 		var steamId = AdminCache.Keys.ToList()[index];
-					// 		
-					// 		var data = AdminManager.GetPlayerAdminData(steamId);
-					// 		if (data != null)
-					// 		{
-					// 			AdminManager.RemovePlayerPermissions(steamId, AdminCache[steamId].Flags.ToArray());
-					// 			AdminManager.RemovePlayerFromGroup(steamId, true, AdminCache[steamId].Flags.ToArray());
-					// 		}
-					// 		
-					// 		if (!AdminCache.TryRemove(steamId, out _)) continue;
-					//
-					// 		if (data == null) continue;
-					// 		if (data.Flags.ToList().Count != 0 && data.Groups.ToList().Count != 0)
-					// 			continue;
-					// 		
-					// 		AdminManager.ClearPlayerPermissions(steamId);
-					// 		AdminManager.RemovePlayerAdminData(steamId);
-					// 	}
-					// 	
-					// 	foreach (var player in group)
-					// 	{
-					// 		SteamID.TryParse(player.identity, out var steamId);
-					// 		if (steamId == null) continue;
-					// 		AdminCache.TryAdd(steamId, (player.ends, player.flags));
-					// 	}
-					// });
-
 					return consolidatedData;
 				});
+
+		var newCache = validPlayers.Select(player => (new SteamID(player.identity), player.ends, player.flags)).ToList();
 
 		var options = new JsonSerializerOptions
 		{
@@ -603,12 +524,42 @@ public class PermissionManager(IDatabaseProvider? databaseProvider, CS2_SimpleAd
 		};
 
 		var json = JsonSerializer.Serialize(jsonData, options);
-		var filePath = Path.Combine(CS2_SimpleAdmin.Instance.ModuleDirectory, "data", "admins.json");
+        var filePath = Path.Combine(CS2_SimpleAdmin.Instance.ModuleDirectory, "data", "admins.json");
+        await File.WriteAllTextAsync(filePath, json);
 
-		await File.WriteAllTextAsync(filePath, json);
-
-		//await File.WriteAllTextAsync(CS2_SimpleAdmin.Instance.ModuleDirectory + "/data/admins.json", json);
+        return newCache;
 	}
+
+	/// <summary>
+    /// Removes permissions of all previously cached admins and replaces the cache with the given admins.
+    /// Must run on the main thread, right before AdminManager.LoadAdminData so admins are not left stripped.
+    /// </summary>
+    /// <param name="admins">Admins loaded from the database.</param>
+    public static void ApplyAdminCache(List<(SteamID steamId, DateTime? ends, List<string> flags)> admins)
+    {
+        foreach (var steamId in AdminCache.Keys.ToList())
+        {
+            if (!AdminCache.TryRemove(steamId, out var cached)) continue;
+
+            var data = AdminManager.GetPlayerAdminData(steamId);
+            if (data == null) continue;
+
+            var flagsArray = cached.Flags.ToArray();
+            AdminManager.RemovePlayerPermissions(steamId, flagsArray);
+            AdminManager.RemovePlayerFromGroup(steamId, true, flagsArray);
+
+            data = AdminManager.GetPlayerAdminData(steamId);
+            if (data == null || (data.Flags.Count != 0 && data.Groups.Count != 0)) continue;
+
+            AdminManager.ClearPlayerPermissions(steamId);
+            AdminManager.RemovePlayerAdminData(steamId);
+        }
+
+        foreach (var (steamId, ends, flags) in admins)
+        {
+            AdminCache.TryAdd(steamId, (ends, flags));
+        }
+    }
 
 	/// <summary>
 	/// Deletes an admin by their SteamID from the database asynchronously.

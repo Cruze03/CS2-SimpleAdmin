@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
 	  <RootNamespace>CS2_SimpleAdmin</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -18,13 +18,13 @@
 </PropertyGroup>
 
     <ItemGroup>
-    <PackageReference Include="CounterStrikeSharp.API" Version="1.0.367">
+    <PackageReference Include="CounterStrikeSharp.API" Version="1.0.369">
       <PrivateAssets>none</PrivateAssets>
       <ExcludeAssets>runtime</ExcludeAssets>
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-        <PackageReference Include="Dapper" Version="2.1.72" />
-    <PackageReference Include="MySqlConnector" Version="2.5.0" />
+        <PackageReference Include="Dapper" Version="2.1.79" />
+    <PackageReference Include="MySqlConnector" Version="*" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
     <PackageReference Include="System.Linq.Async" Version="7.0.1" />
     <PackageReference Include="ZLinq" Version="1.5.6" />
@@ -35,106 +35,10 @@
   </ItemGroup>
 <ItemGroup>
 	<None Update="lang\**\*.*" CopyToOutputDirectory="PreserveNewest" />
-	<None Update="Database\Migrations\Mysql\001_CreateTables.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\002_CreateFlagsTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\003_ChangeColumnsPosition.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\004_MoveOldFlagsToFlagsTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\005_CreateUnbansTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\006_ServerGroupsFeature.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\007_ServerGroupsGlobal.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\008_OnlineTimeInPenalties.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\009_BanAllUsedIpAddress.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\010_CreateWarnsTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\011_AddRconColumnToServersTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\012_AddUpdatedAtColumnToSaBansTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\013_AddNameColumnToSaPlayerIpsTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\014_AddIndexesToMutesTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\015_steamidToBigInt.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Mysql\016_OptimizeTablesAndIndexes.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\001_CreateTables.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\002_CreateFlagsTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\003_ChangeColumnsPosition.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\004_MoveOldFlagsToFlagsTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\005_CreateUnbansTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\006_ServerGroupsFeature.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\007_ServerGroupsGlobal.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\008_OnlineTimeInPenalties.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\009_BanAllUsedIpAddress.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\010_CreateWarnsTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\011_AddRconColumnToServersTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\012_AddUpdatedAtColumnToSaBansTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\013_AddNameColumnToSaPlayerIpsTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\014_AddIndexesToMutesTable.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\015_steamidToBigInt.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Database\Migrations\Sqlite\016_OptimizeTablesAndIndexes.sql">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
 </ItemGroup>
 
 	<ItemGroup>
-    <None Update="Database\Migrations\*.sql" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Database\Migrations\**\*.sql" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   
   <ItemGroup>

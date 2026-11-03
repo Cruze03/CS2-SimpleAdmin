@@ -43,6 +43,8 @@ public class ServerManager
             if (_getIpTryCount > 32 && isInvalidIp)
             {
                 CS2_SimpleAdmin._logger?.LogError("Unable to load server data - can't fetch ip address!");
+                CS2_SimpleAdmin.Instance.ReloadAdmins(null); // still load global admins
+                _ = CS2_SimpleAdmin.PlayerManager.LoadRenamedPlayers();
                 return;
             }
 
@@ -123,11 +125,18 @@ public class ServerManager
                     {
                         await CS2_SimpleAdmin.Instance.CacheManager.InitializeCacheAsync();
                     }
+
+                    // Admins are loaded only now, once ServerId is known, so server-specific admins are included
+                    CS2_SimpleAdmin.Instance.ReloadAdmins(null);
                 }
                 catch (Exception ex)
                 {
                     CS2_SimpleAdmin._logger?.LogCritical("Unable to create or get server_id: " + ex.Message);
+                    CS2_SimpleAdmin.Instance.ReloadAdmins(null); // still load global admins
                 }
+
+                // Renames are server-independent, so load them even when the server row could not be resolved
+                await CS2_SimpleAdmin.PlayerManager.LoadRenamedPlayers();
             });
 
             CS2_SimpleAdmin.SimpleAdminApi?.OnSimpleAdminReadyEvent();
