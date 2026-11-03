@@ -68,3 +68,10 @@ ALTER TABLE `sa_mutes` MODIFY `player_steamid` VARCHAR(64) NOT NULL;
 ALTER TABLE `sa_warns` MODIFY `player_steamid` VARCHAR(64) NOT NULL;
 
 ALTER TABLE `sa_admins` MODIFY `player_steamid` VARCHAR(64) NOT NULL;
+CREATE TABLE IF NOT EXISTS `sa_metrics` (
+    `server_id` int(11) NOT NULL,
+    `steamid` bigint(20) NOT NULL,
+    `date` DATE NOT NULL,
+    PRIMARY KEY (`server_id`, `steamid`, `date`),
+    INDEX `server_date` (`server_id`, `date`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;

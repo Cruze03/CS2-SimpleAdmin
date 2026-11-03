@@ -72,4 +72,7 @@ public interface IDatabaseProvider
 
     // Penalty history (css_history)
     string GetPenaltyHistoryQuery(bool multiServer);
+
+    // Metrics (CSS Panel)
+    string GetInsertMetricQuery();
 }

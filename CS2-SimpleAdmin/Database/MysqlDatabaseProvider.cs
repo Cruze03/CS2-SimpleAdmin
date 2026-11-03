@@ -475,6 +475,9 @@ public class MySqlDatabaseProvider(string connectionString) : IDatabaseProvider
         ORDER BY created DESC
         """;
 
+    public string GetInsertMetricQuery() =>
+        "INSERT IGNORE INTO `sa_metrics` (`server_id`, `steamid`, `date`) VALUES (@serverId, @steamId, @date)";
+
     public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 }
 

@@ -38,3 +38,11 @@ CREATE TABLE IF NOT EXISTS sa_statistics (
     flags TEXT,
     map TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS sa_metrics (
+    server_id INTEGER NOT NULL,
+    steamid INTEGER NOT NULL,
+    date TEXT NOT NULL,
+    PRIMARY KEY (server_id, steamid, date)
+);
+
+CREATE INDEX IF NOT EXISTS sa_metrics_server_date ON sa_metrics (server_id, date);

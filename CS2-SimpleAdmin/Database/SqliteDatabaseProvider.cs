@@ -444,4 +444,7 @@ public class SqliteDatabaseProvider(string filePath) : IDatabaseProvider
         WHERE w.player_steamid = @PlayerSteamID {(multiServer ? "" : "AND w.server_id = @serverid")}
         ORDER BY created DESC
         """;
+
+    public string GetInsertMetricQuery() =>
+        "INSERT OR IGNORE INTO sa_metrics (server_id, steamid, date) VALUES (@serverId, @steamId, @date)";
 }
