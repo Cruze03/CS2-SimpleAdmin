@@ -31,8 +31,6 @@ public partial class CS2_SimpleAdmin : BasePlugin, IPluginConfig<CS2_SimpleAdmin
 
         Menu = new KitsuneMenu(this);
 
-        RegisterEvents();
-
         if (hotReload)
         {
             ServerLoaded = false;
@@ -74,7 +72,6 @@ public partial class CS2_SimpleAdmin : BasePlugin, IPluginConfig<CS2_SimpleAdmin
 
     public override void OnAllPluginsLoaded(bool hotReload)
     {
-        AddTimer(6.0f, () => ReloadAdmins(null));
         RegisterEvents();
         AddTimer(0.5f, RegisterCommands.InitializeCommands);
         // Admins are reloaded by ServerManager once ServerId is known (or on its failure paths).
@@ -84,11 +81,7 @@ public partial class CS2_SimpleAdmin : BasePlugin, IPluginConfig<CS2_SimpleAdmin
             if (!ServerLoaded) OnGameServerSteamAPIActivated();
         });
 
-        new PlayerManager().CheckPlayersTimer();
-
         ChatManager = new ChatManager();
-
-        RegisterCommands.InitializeCommands();
 
         if (!CoreConfig.UnlockConCommands)
         {
