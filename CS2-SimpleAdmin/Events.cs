@@ -383,18 +383,11 @@ public partial class CS2_SimpleAdmin
             || info.GetArg(1).StartsWith($"!"))
             return HookResult.Continue;
 
-        if (info.GetArg(1).Length == 0)
+        if (AdminManager.PlayerHasPermissions(new SteamID(player.SteamID), "@css/chat") && command == "say" && info.GetArg(1).StartsWith($"@"))
+        {
+            player.ExecuteClientCommandFromServer($"css_say {info.GetArg(1).Remove(0, 1)}");
             return HookResult.Stop;
-
-        if (command == "say" && info.GetArg(1).StartsWith($"@") &&
-            AdminManager.PlayerHasPermissions(new SteamID(player.SteamID), "@css/chat"))
-            // }
-
-            if (AdminManager.PlayerHasPermissions(new SteamID(player.SteamID), "@css/chat") && command == "say" && info.GetArg(1).StartsWith($"@"))
-            {
-                player.ExecuteClientCommandFromServer($"css_say {info.GetArg(1).Remove(0, 1)}");
-                return HookResult.Stop;
-            }
+        }
 
         if ((command == "say" || command == "say_team") && Config.IsCSSPanel)
         {

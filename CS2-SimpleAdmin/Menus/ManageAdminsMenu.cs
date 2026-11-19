@@ -11,8 +11,7 @@ public static class ManageAdminsMenu
     public static void OpenMenu(CCSPlayerController admin)
     {
         if (!admin.IsValid)
-            if (!admin.IsValid)
-                return;
+            return;
 
         var localizer = CS2_SimpleAdmin._localizer;
 
